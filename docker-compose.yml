@@ -1,0 +1,11 @@
+name: "t3-chat-application"
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=t3Chat-application
+    restart: always
