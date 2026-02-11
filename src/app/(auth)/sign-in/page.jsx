@@ -103,7 +103,7 @@ const SignInPage = () => {
         </CardFooter>
         <div className="mt-4 space-y-2 text-center text-sm">
           <Link
-            href="/forgot-password"
+            href="/forget-password"
             className="text-primary hover:underline">
             Forgot your password?
           </Link>

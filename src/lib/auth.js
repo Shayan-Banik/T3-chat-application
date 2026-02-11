@@ -8,7 +8,11 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      console.log("Reset password link sent to", user.email, ":", url);
+    },
   },
+
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID,
