@@ -7,12 +7,16 @@ import { Send } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import ModelSelector from "./model-selector";
 import { useAIModels } from "../../ai-agents/hooks/ai-agent";
+import { useCreateChat } from "../hooks/chat";
+import { toast } from "sonner";
 
 const ChatMessageForm = ({ initialMessage, onMessageChange }) => {
   const { data: models, isPending } = useAIModels();
 
   const [message, setMessage] = useState("");
   const [selectedModel, setSelectedModel] = useState(null);
+
+  const { mutateAsync, isPending: isChatPending } = useCreateChat();
 
   useEffect(() => {
     if (initialMessage) {
@@ -21,12 +25,19 @@ const ChatMessageForm = ({ initialMessage, onMessageChange }) => {
     }
   }, [initialMessage, onMessageChange]);
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     try {
       e.preventDefault();
-      console.log("Message sent");
+      await mutateAsync({
+        content: message,
+        model: selectedModel,
+      });
+      toast.success("Message sent successfully");
     } catch (error) {
-      console.error("Error sending message:");
+      console.log("Error sending message:");
+      toast.error("Failed to send message");
+    } finally {
+      setMessage("");
     }
   };
 
@@ -64,9 +75,17 @@ const ChatMessageForm = ({ initialMessage, onMessageChange }) => {
               )}
             </div>
 
-            <Button type="submit">
-              <Send className="h-5 w-4" />
-              <span className="sr-only">Send</span>
+            <Button disabled={!message || isChatPending} type="submit">
+              {isChatPending ? (
+                <>
+                  <Spinner />
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-4" />
+                  <span className="sr-only">Send</span>
+                </>
+              )}
             </Button>
           </div>
         </div>
