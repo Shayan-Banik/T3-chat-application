@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { createChatWithMessage, deleteChat } from "../actions";
+import { createChatWithMessage, deleteChat, getChatById } from "../actions";
 import { toast } from "sonner";
 
 export const useCreateChat = () => {
@@ -42,3 +42,11 @@ export const useDeleteChat = (chatId) => {
     },
   })
 }
+
+
+export const useGetChatById = (chatId) => {
+  return useQuery({
+    queryKey: ["chat", chatId],
+    queryFn: () => getChatById(chatId),
+  });
+};
